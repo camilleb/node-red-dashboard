@@ -41,8 +41,8 @@ gulp.task('manifest', ['build'], function() {
         //preferOnline: true,
         network: ['*'],
         filename: 'dashboard.appcache',
-        //exclude: 'dashboard.appcache'
-        exclude: ['dashboard.appcache','index.html']
+        exclude: 'dashboard.appcache'
+        //exclude: ['dashboard.appcache','index.html']
     }))
     .pipe(gulp.dest('dist/'));
 });
@@ -75,9 +75,8 @@ gulp.task('index', function() {
         'before': /<\/body>$/,
         'lineBefore': '<script src="js/tinycolor-min.js"></script>'
     }))
-    //.pipe(minifyHTML({collapseWhitespace:true, conservativeCollapse:true}))
-    .pipe(gulp.dest('dist/'))
-    .pipe(livereload());
+    .pipe(minifyHTML({collapseWhitespace:true, conservativeCollapse:true}))
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('icon', function() {
@@ -94,7 +93,7 @@ gulp.task('js', function () {
     .pipe(ghtmlSrc({getFileName:getFileName.bind(this, 'src')}));
 
     var templates = gulp.src(['src/**/*.html', '!src/index.html'])
-    //.pipe(minifyHTML({collapseWhitespace:true, conservativeCollapse:true}))
+    .pipe(minifyHTML({collapseWhitespace:true, conservativeCollapse:true}))
     .pipe(templateCache('templates.js', {root:'', module:'ui'}));
 
     var tiny = gulp.src('node_modules/tinycolor2/dist/tinycolor-min.js')
@@ -110,7 +109,7 @@ gulp.task('js', function () {
 });
 
 gulp.task('css', function () {
-    exec('node fixfa.js', function (err, stdout, stderr) {
+    exec('./fixfa.sh', function (err, stdout, stderr) {
         if (err) {
             console.log(stdout);
             console.log(stderr);
