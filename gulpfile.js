@@ -21,7 +21,18 @@ var
     templateCache = require('gulp-angular-templatecache'),
     uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
-    jscs = require('gulp-jscs');
+    jscs = require('gulp-jscs'),
+    livereload = require('gulp-livereload');
+
+
+gulp.task('watch', function () {
+    livereload.listen();
+    gulp.watch('src/index.html', ['build']);
+    gulp.watch('src/**/*.html', ['build']);
+    gulp.watch('src/**/*.js', ['build']);
+    gulp.watch('src/**/*.less', ['build']);
+    gulp.watch('src/**/*.css', ['build']);
+});
 
 //gulp.task('default', ['manifest']);
 gulp.task('default', ['lint','jscs'], function() {
@@ -103,7 +114,7 @@ gulp.task('js', function () {
     var i18n = gulp.src('src/i18n.js').pipe(gulp.dest('dist/'));
 
     return streamqueue({ objectMode:true }, scripts, templates)
-    .pipe(gulpif(/[.]min[.]js$/, gutil.noop(), uglify()))
+    //.pipe(gulpif(/[.]min[.]js$/, gutil.noop(), uglify()))
     .pipe(concat('app.min.js'))
     .pipe(header(fs.readFileSync('license.js')))
     .pipe(gulp.dest('dist/js/'));
